@@ -4,23 +4,26 @@ using UnityEngine;
 
 public class PhotonController : MonoBehaviourPunCallbacks
 {
+
     [SerializeField]
-    private string _UserName = "Christian Clavijo";
+    private string _UserName = "Bart Simpson";
 
     [SerializeField]
     private int _SerializationRate = 10;
 
     private void Awake()
     {
-        PhotonNetwork.SendRate = 2 *_SerializationRate;
+        PhotonNetwork.SendRate = 2 * _SerializationRate;
         PhotonNetwork.SerializationRate = _SerializationRate;
+        print($"{PhotonNetwork.SendRate} - {PhotonNetwork.SerializationRate}");
+
         PhotonNetwork.NickName = _UserName;
         PhotonNetwork.ConnectUsingSettings();
     }
 
     override public void OnConnectedToMaster()
     {
-        //print("OnConnectedToMaster");
+        // print("OnConnectedToMaster");
         var roomOptions = new RoomOptions()
         {
             MaxPlayers = 20,
@@ -28,13 +31,13 @@ public class PhotonController : MonoBehaviourPunCallbacks
             IsOpen = true
         };
 
-        PhotonNetwork.JoinOrCreateRoom("GD56",roomOptions,TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom("GD56", roomOptions, TypedLobby.Default);
     }
 
     override public void OnJoinedRoom()
     {
-        print($"OnJoinRoom {PhotonNetwork.CurrentRoom.Name}");
-        var clone = PhotonNetwork.Instantiate("Net_Nightshade",transform.position,transform.rotation);
+        // print($"OnJoinedRoom {PhotonNetwork.CurrentRoom.Name}");
+        var clone = PhotonNetwork.Instantiate("Net_Nightshade", transform.position, transform.rotation);
         clone.name = $"Net_{_UserName}";
     }
 
@@ -42,9 +45,9 @@ public class PhotonController : MonoBehaviourPunCallbacks
     {
         print($"{newPlayer.NickName} Joined the Room");
     }
-    
+
     override public void OnMasterClientSwitched(Player newMasterClient)
     {
-        print($"{newMasterClient.NickName} is the new MASTER ");
+        print($"{newMasterClient.NickName} is the new MASTER");
     }
 }
